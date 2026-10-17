@@ -1,0 +1,931 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>mmmmagic — 学生 / 开发者 / 剪辑爱好者</title>
+<meta name="description" content="mmmmagic 的个人主页：学生，喜欢写代码、剪视频和《绝区零》，最喜欢的角色是莱卡恩。">
+<meta name="author" content="mmmmagic">
+<meta name="robots" content="index, follow">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0f1115">
+<link rel="canonical" href="https://mmmmagic.github.io/">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="mmmmagic">
+<meta property="og:title" content="mmmmagic — 学生 / 开发者 / 剪辑爱好者">
+<meta property="og:description" content="写代码、剪视频、玩《绝区零》。最喜欢的角色是莱卡恩。">
+<meta property="og:url" content="https://mmmmagic.github.io/">
+<meta property="og:image" content="https://mmmmagic.github.io/assets/lycaon-hero.webp">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="mmmmagic — 学生 / 开发者 / 剪辑爱好者">
+<meta name="twitter:description" content="写代码、剪视频、玩《绝区零》。最喜欢的角色是莱卡恩。">
+<meta name="twitter:image" content="https://mmmmagic.github.io/assets/lycaon-hero.webp">
+
+<link rel="icon" type="image/png" href="assets/avatar.png">
+<link rel="apple-touch-icon" href="assets/avatar.png">
+<link rel="preload" as="image" href="assets/lycaon-hero.webp" type="image/webp" fetchpriority="high">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"mmmmagic","url":"https://mmmmagic.github.io","jobTitle":"Student","sameAs":["https://github.com/mmmmagic","https://space.bilibili.com/3546686844569724"]}
+</script>
+
+<script>document.documentElement.classList.add('js');</script>
+
+<style>
+/* =========================================================
+   Design tokens
+   ========================================================= */
+:root{
+  --bg:#0f1115;
+  --panel:rgba(255,255,255,.028);
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(255,255,255,.16);
+  --text:#eceef3;
+  --text-2:#b7bbc6;
+  --muted:#8e93a1;
+  --accent:#a78bfa;
+  --accent-strong:#8b5cf6;
+  --accent-soft:rgba(167,139,250,.14);
+  --sans:"Montserrat","Segoe UI",system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  --gutter:clamp(20px,5vw,48px);
+  --max:1180px;
+  --header-h:64px;
+  --ease:cubic-bezier(.22,.8,.24,1);
+  color-scheme:dark;
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  letter-spacing:.02em;overflow-x:hidden;
+}
+html[lang="en"] body{letter-spacing:.005em}
+body.lock{overflow:hidden}
+h1,h2,h3,p,ul,dl,dd{margin:0}
+ul{padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+img{display:block;max-width:100%}
+svg{display:block}
+::selection{background:rgba(167,139,250,.35);color:#fff}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+.wrap{width:100%;max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:fixed;left:16px;top:-64px;z-index:100;padding:10px 16px;border-radius:10px;background:#fff;color:#111;font-weight:600;transition:transform .25s var(--ease)}
+.skip:focus{transform:translateY(80px)}
+
+/* Film grain (inline SVG filter, no external request) */
+.grain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40;opacity:.035}
+
+/* Cursor glow */
+.cursor-glow{
+  position:fixed;left:0;top:0;width:420px;height:420px;border-radius:50%;
+  pointer-events:none;z-index:45;opacity:0;transition:opacity .5s ease;
+  background:radial-gradient(circle,rgba(139,92,246,.16) 0%,rgba(139,92,246,.06) 38%,transparent 68%);
+  will-change:transform;
+}
+.cursor-glow.on{opacity:1}
+@media (hover:none),(pointer:coarse){.cursor-glow{display:none}}
+
+/* Reveal on scroll */
+.js .reveal{opacity:0;transform:translate3d(0,22px,0);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0ms)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* =========================================================
+   Header / Navigation
+   ========================================================= */
+.site-header{
+  position:fixed;inset:0 0 auto 0;z-index:50;border-bottom:1px solid transparent;
+  transition:background-color .35s ease,border-color .35s ease;
+}
+.site-header.scrolled{
+  background:rgba(15,17,21,.74);
+  -webkit-backdrop-filter:saturate(140%) blur(14px);backdrop-filter:saturate(140%) blur(14px);
+  border-bottom-color:var(--line);
+}
+.header-inner{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:var(--header-h)}
+.brand{display:inline-flex;align-items:center;gap:10px;font-weight:600;letter-spacing:.03em;justify-self:start;border-radius:8px}
+.brand-mark{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(167,139,250,.16),0 0 18px rgba(167,139,250,.8)}
+
+.nav-center{position:relative}
+.nav-links{display:flex;gap:4px}
+.nav-links a{display:block;padding:8px 16px;font-size:.9rem;color:var(--muted);transition:color .25s ease;border-radius:8px}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-ind{position:absolute;left:0;bottom:-2px;width:1px;height:2px;background:var(--accent);transform-origin:left center;opacity:0;pointer-events:none}
+.nav-ind.ready{transition:transform .4s var(--ease),opacity .3s ease}
+
+.header-actions{display:flex;align-items:center;gap:10px;justify-self:end}
+.lang{position:relative;display:inline-flex;padding:3px;border:1px solid var(--line-strong);border-radius:999px;background:rgba(255,255,255,.03)}
+.lang-thumb{position:absolute;top:3px;left:3px;width:38px;height:28px;border-radius:999px;background:var(--accent-soft);border:1px solid rgba(167,139,250,.45);transition:transform .35s var(--ease)}
+.lang[data-active="en"] .lang-thumb{transform:translateX(38px)}
+.lang button{position:relative;z-index:1;width:38px;height:28px;border-radius:999px;font-size:.78rem;font-weight:600;color:var(--muted);transition:color .25s ease}
+.lang button[aria-pressed="true"]{color:var(--text)}
+.icon-btn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--line-strong);color:var(--text-2);transition:transform .3s var(--ease),color .25s ease,border-color .25s ease}
+.icon-btn:hover{color:#fff;border-color:rgba(167,139,250,.7);transform:translateY(-2px)}
+.icon-btn svg{width:18px;height:18px}
+.burger{display:none;position:relative}
+.burger span{position:absolute;left:10px;right:10px;height:1.5px;background:currentColor;border-radius:2px;transition:transform .35s var(--ease),opacity .2s ease}
+.burger span:nth-child(1){top:13px}.burger span:nth-child(2){top:17.5px}.burger span:nth-child(3){top:22px}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(4.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-4.5px) rotate(-45deg)}
+
+/* Mobile drawer */
+.backdrop{position:fixed;inset:0;z-index:55;background:rgba(5,6,9,.6);opacity:0;pointer-events:none;transition:opacity .35s ease}
+.backdrop.open{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;right:0;z-index:60;width:min(86vw,340px);height:100vh;height:100dvh;
+  display:flex;flex-direction:column;padding:18px 24px 28px;
+  background:#12141a;border-left:1px solid var(--line);
+  transform:translateX(102%);visibility:hidden;
+  transition:transform .4s var(--ease),visibility 0s linear .4s;
+}
+.drawer.open{transform:none;visibility:visible;transition:transform .4s var(--ease),visibility 0s}
+.drawer-top{display:flex;align-items:center;justify-content:space-between;height:44px}
+.drawer-links{margin-top:28px;display:grid}
+.drawer-links a{display:flex;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);font-size:1.4rem;font-weight:600;letter-spacing:-.01em}
+.drawer-links .num{font:500 .72rem var(--mono);color:var(--accent);letter-spacing:.1em}
+.drawer-gh{margin-top:auto;display:inline-flex;align-items:center;gap:12px;color:var(--text-2);padding:12px 0}
+.drawer-gh svg{width:20px;height:20px}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 24px;border-radius:999px;
+  font-weight:600;font-size:.95rem;border:1px solid var(--line-strong);color:var(--text);
+  background:rgba(255,255,255,.04);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  transition:transform .3s var(--ease),border-color .3s ease,background-color .3s ease,box-shadow .3s ease;
+}
+.btn svg{width:16px;height:16px;transition:transform .3s var(--ease)}
+.btn:hover{transform:translateY(-2px);border-color:rgba(167,139,250,.65);background:rgba(167,139,250,.1)}
+.btn:hover svg{transform:translate(2px,-2px)}
+.btn-primary{background:#eceaf8;color:#12131a;border-color:transparent}
+.btn-primary:hover{background:#fff;border-color:transparent;box-shadow:0 12px 32px -12px rgba(167,139,250,.8)}
+.btn-primary:hover svg{transform:translateY(2px)}
+
+/* =========================================================
+   Hero
+   ========================================================= */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;overflow:hidden;isolation:isolate}
+.hero-bg{
+  position:absolute;inset:-14% 0 0 0;z-index:-3;
+  background:#0b0c10 url("assets/lycaon-hero.webp") right center/cover no-repeat;
+  will-change:transform;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:-2;
+  background:
+    linear-gradient(90deg,rgba(15,17,21,.97) 0%,rgba(15,17,21,.9) 24%,rgba(15,17,21,.55) 50%,rgba(15,17,21,.1) 76%,rgba(15,17,21,0) 100%),
+    linear-gradient(180deg,rgba(15,17,21,.6) 0%,rgba(15,17,21,0) 22%,rgba(15,17,21,0) 68%,var(--bg) 100%);
+}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(55% 70% at 14% 88%,rgba(139,92,246,.17),transparent 70%)}
+.hero-inner{position:relative;width:100%;padding-block:calc(var(--header-h) + 56px) 120px}
+.hero-copy{max-width:700px}
+.hero-id{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.avatar{width:84px;height:84px;padding:3px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);box-shadow:0 0 0 7px rgba(167,139,250,.08),0 14px 44px -12px rgba(139,92,246,.7)}
+.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.hero-role{display:inline-flex;align-items:center;gap:10px;padding:6px 14px;border:1px solid var(--line-strong);border-radius:999px;font:500 .76rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);background:rgba(15,17,21,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.hero-role i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.hero h1{
+  font-size:clamp(3.25rem,10.5vw,7.75rem);font-weight:700;line-height:.98;letter-spacing:-.02em;
+  color:#f4f2ff;
+  background:linear-gradient(180deg,#fff 20%,#b7a3f7 135%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+html[lang="en"] .hero h1{letter-spacing:-.045em}
+.tagline{margin-top:22px;font-size:clamp(1.05rem,2vw,1.35rem);font-weight:500;color:#dcdde5;letter-spacing:.04em}
+.intro{margin-top:16px;max-width:46ch;color:var(--text-2);font-size:1.02rem;line-height:1.8;text-wrap:pretty}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.hero-foot{position:absolute;left:0;right:0;bottom:28px;margin-inline:auto}
+.scroll-hint{display:inline-flex;align-items:center;gap:14px;font:500 .72rem var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border-radius:6px}
+.scroll-hint:hover{color:var(--text)}
+.scroll-line{position:relative;width:1px;height:38px;background:var(--line-strong);overflow:hidden}
+.scroll-line::after{content:"";position:absolute;left:0;top:0;width:1px;height:14px;background:var(--accent);animation:drop 2.2s var(--ease) infinite}
+@keyframes drop{0%{transform:translateY(-16px)}70%,100%{transform:translateY(40px)}}
+
+/* =========================================================
+   Sections
+   ========================================================= */
+.section{position:relative;padding-block:clamp(88px,12vw,152px);scroll-margin-top:0}
+.section+.section{border-top:1px solid var(--line)}
+.section::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
+.s-about::before{background:radial-gradient(48% 58% at 88% 32%,rgba(139,92,246,.1),transparent 70%)}
+.s-contact::before{background:radial-gradient(50% 60% at 50% 100%,rgba(139,92,246,.12),transparent 70%)}
+.sec-head{margin-bottom:clamp(36px,5vw,64px)}
+.label{display:inline-flex;align-items:center;gap:12px;font:500 .76rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.label::after{content:"";width:36px;height:1px;background:var(--line-strong)}
+.sec-title{margin-top:16px;font-size:clamp(2rem,4.6vw,3.2rem);font-weight:650;line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+html[lang="en"] .sec-title{letter-spacing:-.03em}
+.sec-sub{margin-top:14px;max-width:52ch;color:var(--muted);text-wrap:pretty}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(40px,7vw,96px);align-items:center}
+.about-text p{color:var(--text-2);font-size:1.02rem;line-height:1.9;max-width:54ch;text-wrap:pretty}
+.about-text p+p{margin-top:16px}
+.tags{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 32px}
+.tag{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border:1px solid var(--line-strong);border-radius:999px;font-size:.82rem;color:var(--text-2);background:var(--panel)}
+.tag i{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.facts>div{display:grid;grid-template-columns:104px 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--line)}
+.facts>div:last-child{border-bottom:1px solid var(--line)}
+.facts dt{font:500 .72rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.facts dd{color:var(--text)}
+
+.art{position:relative;padding:18px 0 30px 18px}
+.art-ghost{position:absolute;inset:8% 2% 0 10%;border:1px solid var(--line);border-radius:22px;background:rgba(167,139,250,.05);transform:rotate(4deg)}
+.art-frame{
+  position:relative;aspect-ratio:16/9;border-radius:20px;overflow:hidden;
+  border:1px solid var(--line-strong);background:#1b1a26;transform:rotate(-1.8deg);
+  box-shadow:0 40px 80px -32px rgba(139,92,246,.45),0 0 0 6px rgba(255,255,255,.02);
+  transition:transform .7s var(--ease);
+}
+.art:hover .art-frame{transform:rotate(0deg) translateY(-6px)}
+.art-frame img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);will-change:transform}
+.art-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(15,17,21,.55) 100%);pointer-events:none}
+.art-chip{position:absolute;z-index:2;left:16px;bottom:14px;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid var(--line-strong);background:rgba(15,17,21,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:500 .72rem var(--mono);letter-spacing:.08em;color:var(--text)}
+.art-chip i{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+
+/* Skills */
+.skill-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{position:relative;height:100%;padding:26px;border:1px solid var(--line);border-radius:18px;background:var(--panel);transition:transform .45s var(--ease),background-color .45s ease}
+.card::after{content:"";position:absolute;inset:-1px;border:1px solid var(--accent);border-radius:inherit;opacity:0;transition:opacity .45s ease;pointer-events:none}
+.card:hover{transform:translateY(-5px);background:rgba(167,139,250,.05)}
+.card:hover::after{opacity:.45}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px}
+.ico{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;border:1px solid var(--line-strong);background:rgba(255,255,255,.03);color:var(--accent)}
+.ico svg{width:22px;height:22px}
+.badge{padding:3px 10px;border:1px solid var(--line-strong);border-radius:999px;font:500 .7rem var(--mono);letter-spacing:.1em;color:var(--muted)}
+.badge.on{color:var(--accent);border-color:rgba(167,139,250,.4);background:var(--accent-soft)}
+.card h3{font-size:1.2rem;font-weight:650;letter-spacing:-.005em}
+.card p{margin-top:10px;color:var(--text-2);font-size:.95rem;line-height:1.8;text-wrap:pretty}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.c-card{position:relative;display:flex;flex-direction:column;min-height:210px;height:100%;padding:28px;border:1px solid var(--line);border-radius:20px;background:var(--panel);transition:transform .45s var(--ease),background-color .45s ease}
+.c-card::after{content:"";position:absolute;inset:-1px;border:1px solid var(--accent);border-radius:inherit;opacity:0;transition:opacity .45s ease;pointer-events:none}
+.c-card:hover{transform:translateY(-5px);background:rgba(167,139,250,.06)}
+.c-card:hover::after{opacity:.5}
+.c-top{display:flex;align-items:flex-start;justify-content:space-between}
+.c-card .ico{width:48px;height:48px}
+.c-arrow{width:20px;height:20px;color:var(--muted);transition:transform .4s var(--ease),color .3s ease}
+.c-card:hover .c-arrow{transform:translate(4px,-4px);color:var(--accent)}
+.c-label{margin-top:auto;padding-top:28px;font:500 .72rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.c-title{margin-top:6px;font-size:1.3rem;font-weight:650;letter-spacing:-.005em}
+.c-meta{margin-top:4px;color:var(--text-2);font:.9rem var(--mono);overflow-wrap:anywhere}
+.copy-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:28px;padding:18px 22px;border:1px dashed var(--line-strong);border-radius:16px}
+.copy-row p{color:var(--text-2);font-size:.95rem}
+.copy-row code{font:600 1rem var(--mono);color:var(--text);letter-spacing:.06em;margin-inline:6px}
+.copy-btn{margin-left:auto;height:40px;padding:0 18px;font-size:.88rem}
+.copy-btn .lbl-done,.copy-btn .ic-check{display:none}
+.copy-btn.is-copied{border-color:rgba(167,139,250,.7);background:var(--accent-soft)}
+.copy-btn.is-copied .lbl-default,.copy-btn.is-copied .ic-copy{display:none}
+.copy-btn.is-copied .lbl-done{display:inline}
+.copy-btn.is-copied .ic-check{display:block}
+.copy-btn:hover svg{transform:none}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.site-footer{border-top:1px solid var(--line);padding-block:36px 44px}
+.foot-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px}
+.foot-copy{font-size:.88rem;color:var(--text-2)}
+.foot-note{margin-top:6px;font-size:.8rem;color:var(--muted);max-width:62ch;line-height:1.7}
+.to-top{display:inline-flex;align-items:center;gap:10px;height:40px;padding:0 18px;border:1px solid var(--line-strong);border-radius:999px;font-size:.85rem;color:var(--text-2);transition:transform .3s var(--ease),color .25s ease,border-color .25s ease}
+.to-top:hover{transform:translateY(-2px);color:#fff;border-color:rgba(167,139,250,.65)}
+.to-top svg{width:15px;height:15px}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width:1023px){
+  .skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .about-grid{grid-template-columns:1fr}
+  .art{max-width:600px;margin-inline:auto;width:100%}
+}
+@media (max-width:820px){
+  .contact-grid{grid-template-columns:1fr}
+  .c-card{min-height:0;flex-direction:row;align-items:center;gap:20px}
+  .c-top{flex:0 0 auto}
+  .c-top .c-arrow{display:none}
+  .c-body{flex:1;min-width:0}
+  .c-label{padding-top:0}
+  .c-card::before{content:none}
+}
+@media (max-width:768px){
+  .header-inner{grid-template-columns:1fr auto}
+  .nav-center,.header-actions .gh-btn{display:none}
+  .burger{display:inline-grid}
+  .hero{align-items:flex-end}
+  .hero-bg{inset:0 0 auto 0;height:68vh;height:68svh;min-height:420px;background-position:82% center}
+  .hero::before{background:linear-gradient(180deg,rgba(15,17,21,.5) 0%,rgba(15,17,21,.04) 20%,rgba(15,17,21,.2) 40%,rgba(15,17,21,.9) 70%,var(--bg) 100%)}
+  .hero::after{background:radial-gradient(70% 50% at 20% 100%,rgba(139,92,246,.18),transparent 70%)}
+  .hero-inner{padding-block:calc(var(--header-h) + 48vh) 96px}
+  .hero-foot{display:none}
+  .copy-btn{margin-left:0}
+}
+@media (max-width:560px){
+  .skill-grid{grid-template-columns:1fr}
+  .facts>div{grid-template-columns:84px 1fr}
+}
+@media (max-width:480px){
+  .hero-bg{background-position:80% center}
+  .avatar{width:72px;height:72px}
+  .hero-id{margin-bottom:22px}
+  .cta .btn{flex:1 1 auto;justify-content:center}
+  .c-card{padding:22px;gap:16px}
+  .copy-row{padding:16px}
+}
+@media (min-width:1280px){
+  .hero-inner{padding-top:calc(var(--header-h) + 72px)}
+}
+
+/* =========================================================
+   Reduced motion
+   ========================================================= */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .reveal{opacity:1;transform:none}
+  .cursor-glow{display:none}
+  .art-frame{transform:none}
+}
+</style>
+</head>
+
+<body>
+<!-- Film grain -->
+<svg class="grain" aria-hidden="true" focusable="false">
+  <filter id="grainF"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  <rect width="100%" height="100%" filter="url(#grainF)"/>
+</svg>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+<a class="skip" href="#main" data-en="Skip to content">跳到主要内容</a>
+
+<!-- ================= Header ================= -->
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-inner">
+    <a class="brand" href="#home" aria-label="mmmmagic 首页" data-en-label="mmmmagic — home">
+      <span class="brand-mark" aria-hidden="true"></span>mmmmagic
+    </a>
+
+    <nav class="nav-center" aria-label="主导航" data-en-label="Primary">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" data-id="home" data-en="Home">首页</a></li>
+        <li><a href="#about" data-id="about" data-en="About">关于</a></li>
+        <li><a href="#skills" data-id="skills" data-en="Skills">技能</a></li>
+        <li><a href="#contact" data-id="contact" data-en="Contact">联系</a></li>
+      </ul>
+      <span class="nav-ind" id="navInd" aria-hidden="true"></span>
+    </nav>
+
+    <div class="header-actions">
+      <div class="lang" role="group" aria-label="语言 / Language" data-active="zh">
+        <span class="lang-thumb" aria-hidden="true"></span>
+        <button type="button" data-lang-btn="zh" aria-pressed="true" lang="zh-CN" aria-label="中文">中</button>
+        <button type="button" data-lang-btn="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
+      </div>
+      <a class="icon-btn gh-btn" href="https://github.com/mmmmagic" target="_blank" rel="noopener" aria-label="GitHub（新窗口打开）" data-en-label="GitHub (opens in a new tab)">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      <button class="icon-btn burger" id="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="打开菜单" data-en-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer (kept outside header: backdrop-filter would break fixed positioning) -->
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="菜单" data-en-label="Menu" inert>
+  <div class="drawer-top">
+    <span class="brand"><span class="brand-mark" aria-hidden="true"></span>mmmmagic</span>
+    <button class="icon-btn" id="drawerClose" type="button" aria-label="关闭菜单" data-en-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <nav aria-label="移动端导航" data-en-label="Mobile">
+    <ul class="drawer-links">
+      <li><a href="#home"><span class="num">01</span><span data-en="Home">首页</span></a></li>
+      <li><a href="#about"><span class="num">02</span><span data-en="About">关于</span></a></li>
+      <li><a href="#skills"><span class="num">03</span><span data-en="Skills">技能</span></a></li>
+      <li><a href="#contact"><span class="num">04</span><span data-en="Contact">联系</span></a></li>
+    </ul>
+  </nav>
+  <a class="drawer-gh" href="https://github.com/mmmmagic" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+    <span>github.com/mmmmagic</span>
+  </a>
+</aside>
+
+<main id="main">
+
+  <!-- ================= Hero ================= -->
+  <section class="hero" id="home" aria-labelledby="hero-title">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <div class="hero-id reveal">
+          <div class="avatar"><img src="assets/avatar.png" width="420" height="420" alt="mmmmagic avatar" decoding="async"></div>
+          <span class="hero-role"><i aria-hidden="true"></i><span data-en="Student">学生</span></span>
+        </div>
+        <h1 id="hero-title" class="reveal" style="--d:80ms">mmmmagic</h1>
+        <p class="tagline reveal" style="--d:160ms" data-en="Student / Developer / Video editor">学生 / 开发者 / 剪辑爱好者</p>
+        <p class="intro reveal" style="--d:240ms" data-en="A student who likes writing code, cutting video, and following Von Lycaon through Zenless Zone Zero. Welcome to my corner of the web.">学生一枚，喜欢写代码、剪视频，也在《绝区零》里追着莱卡恩跑。欢迎来我的小角落坐坐。</p>
+        <div class="cta reveal" style="--d:320ms">
+          <a class="btn btn-primary" href="#contact">
+            <span data-en="Contact me">联系我</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+          </a>
+          <a class="btn" href="https://github.com/mmmmagic" target="_blank" rel="noopener" aria-label="GitHub（新窗口打开）" data-en-label="GitHub (opens in a new tab)">
+            <span>GitHub</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="wrap hero-foot reveal" style="--d:600ms">
+      <a class="scroll-hint" href="#about" aria-label="向下滚动到关于我" data-en-label="Scroll down to About">
+        <span class="scroll-line" aria-hidden="true"></span>
+        <span data-en="Scroll">向下滚动</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= About ================= -->
+  <section class="section s-about" id="about" aria-labelledby="about-title">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="sec-head reveal" style="margin-bottom:28px">
+            <span class="label">01 · About</span>
+            <h2 class="sec-title" id="about-title" data-en="About me">关于我</h2>
+          </div>
+          <p class="reveal" style="--d:60ms" data-en="I'm mmmmagic, a student. I like tinkering with code and cutting video: small tools, the odd Minecraft mod, and timelines in DaVinci Resolve.">我是 mmmmagic，一名学生。平时喜欢折腾代码，也喜欢剪视频：写点小工具、做做 Minecraft 模组，或者在达芬奇里把素材一段段拼起来。</p>
+          <p class="reveal" style="--d:120ms" data-en="Lately I've been playing Zenless Zone Zero, and Von Lycaon is my favorite character. This site is a small corner I built for myself, and the artwork is official, used out of fandom.">最近在玩《绝区零》，最喜欢的角色是莱卡恩。这个小站是给自己搭的一个角落，配图取自官方视觉，仅出于喜爱。</p>
+          <ul class="tags reveal" style="--d:180ms" aria-label="标签" data-en-label="Tags">
+            <li class="tag"><i aria-hidden="true"></i><span data-en="Student">学生</span></li>
+            <li class="tag"><i aria-hidden="true"></i><span data-en="Code">写代码</span></li>
+            <li class="tag"><i aria-hidden="true"></i><span data-en="Video">剪视频</span></li>
+            <li class="tag"><i aria-hidden="true"></i><span data-en="ZZZ">绝区零</span></li>
+          </ul>
+          <dl class="facts reveal" style="--d:240ms">
+            <div><dt data-en="Role">身份</dt><dd data-en="Student">学生</dd></div>
+            <div><dt data-en="Daily">常做</dt><dd data-en="Coding, video editing">写代码、剪视频</dd></div>
+            <div><dt data-en="Playing">在玩</dt><dd data-en="Zenless Zone Zero">《绝区零》</dd></div>
+            <div><dt data-en="Favorite">本命</dt><dd data-en="Von Lycaon">莱卡恩（Von Lycaon）</dd></div>
+          </dl>
+        </div>
+
+        <div class="art reveal" style="--d:120ms">
+          <div class="art-ghost" aria-hidden="true"></div>
+          <figure class="art-frame" id="artFrame" style="margin:0">
+            <img id="artImg" src="assets/lycaon-art.webp" width="2560" height="1440" loading="lazy" decoding="async" alt="莱卡恩官方视觉图" data-en-alt="Official artwork of Von Lycaon">
+            <figcaption class="art-chip"><i aria-hidden="true"></i><span data-en="Von Lycaon">莱卡恩</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Skills ================= -->
+  <section class="section s-skills" id="skills" aria-labelledby="skills-title">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">02 · Skills</span>
+        <h2 class="sec-title" id="skills-title" data-en="Skills">技能</h2>
+        <p class="sec-sub" data-en="What I'm learning, and what I use day to day.">正在学的，和平时在用的。</p>
+      </div>
+      <ul class="skill-grid">
+        <li class="reveal" style="--d:0ms">
+          <article class="card">
+            <div class="card-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4C7 4 7 5 7 7v2c0 1.5-1 2.5-3 3 2 .5 3 1.5 3 3v2c0 2 0 3 2 3M15 4c2 0 2 1 2 3v2c0 1.5 1 2.5 3 3-2 .5-3 1.5-3 3v2c0 2 0 3-2 3"/></svg></span>
+              <span class="badge on" data-en="Learning">在学</span>
+            </div>
+            <h3>C++</h3>
+            <p data-en="Getting into systems programming: syntax, the standard library, and small programs to practice on.">系统编程入门：从语法和标准库开始，用小程序练手。</p>
+          </article>
+        </li>
+        <li class="reveal" style="--d:70ms">
+          <article class="card">
+            <div class="card-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10h5M10.5 10v7"/><path d="M16.5 10.2c-.6-.4-1.8-.5-2.4 0s-.5 1.3.4 1.7l1.2.5c.9.4 1 1.3.4 1.8s-1.9.5-2.7-.1"/></svg></span>
+              <span class="badge on" data-en="Learning">在学</span>
+            </div>
+            <h3>TypeScript</h3>
+            <p data-en="Adding types to JavaScript and learning to write sturdier front-end code.">给 JavaScript 加上类型，学着把前端代码写得更稳。</p>
+          </article>
+        </li>
+        <li class="reveal" style="--d:140ms">
+          <article class="card">
+            <div class="card-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18L12 12l9 9H3Z"/></svg></span>
+              <span class="badge on" data-en="Learning">在学</span>
+            </div>
+            <h3>Kotlin</h3>
+            <p data-en="Getting familiar with Kotlin's syntax and idioms, and slowly the JVM ecosystem.">熟悉 Kotlin 的语法与惯用写法，慢慢上手 JVM 生态。</p>
+          </article>
+        </li>
+        <li class="reveal" style="--d:0ms">
+          <article class="card">
+            <div class="card-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9.5h4M3 14.5h4M17 9.5h4M17 14.5h4"/></svg></span>
+              <span class="badge" data-en="In use">常用</span>
+            </div>
+            <h3>DaVinci Resolve</h3>
+            <p data-en="Editing video in DaVinci Resolve, turning loose footage into small finished pieces.">用达芬奇剪辑视频，把零散的素材拼成完整的小片子。</p>
+          </article>
+        </li>
+        <li class="reveal" style="--d:70ms">
+          <article class="card">
+            <div class="card-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></span>
+              <span class="badge" data-en="Tinkering">折腾中</span>
+            </div>
+            <h3 data-en="Minecraft Mods">Minecraft 模组</h3>
+            <p data-en="Making Minecraft mods and testing ideas inside the blocky world.">做 Minecraft 模组，在方块世界里验证各种想法。</p>
+          </article>
+        </li>
+        <li class="reveal" style="--d:140ms">
+          <article class="card">
+            <div class="card-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg></span>
+              <span class="badge" data-en="In use">常用</span>
+            </div>
+            <h3 data-en="Web Frontend">Web 前端</h3>
+            <p data-en="Building pages with HTML, CSS and JavaScript, with a taste for restrained, clean interfaces.">用 HTML / CSS / JavaScript 写页面，偏爱克制、干净的界面。</p>
+          </article>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= Contact ================= -->
+  <section class="section s-contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="label">03 · Contact</span>
+        <h2 class="sec-title" id="contact-title" data-en="Get in touch">联系我</h2>
+        <p class="sec-sub" data-en="Happy to chat about code, video or games. Say hi.">聊代码、剪辑或者游戏都可以，来打个招呼吧。</p>
+      </div>
+
+      <ul class="contact-grid">
+        <li class="reveal" style="--d:0ms">
+          <a class="c-card" href="https://wpa.qq.com/msgrd?v=3&amp;uin=3381645303&amp;site=qq&amp;menu=yes" target="_blank" rel="noopener" aria-label="通过 QQ 添加好友（新窗口打开）" data-en-label="Add me on QQ (opens in a new tab)">
+            <div class="c-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.5-4.6A8 8 0 1 1 21 12Z"/></svg></span>
+              <svg class="c-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </div>
+            <div class="c-body">
+              <p class="c-label">QQ</p>
+              <p class="c-title" data-en="Add me on QQ">添加 QQ 好友</p>
+              <p class="c-meta">3381645303</p>
+            </div>
+          </a>
+        </li>
+        <li class="reveal" style="--d:80ms">
+          <a class="c-card" href="https://github.com/mmmmagic" target="_blank" rel="noopener" aria-label="GitHub（新窗口打开）" data-en-label="GitHub (opens in a new tab)">
+            <div class="c-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span>
+              <svg class="c-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </div>
+            <div class="c-body">
+              <p class="c-label">GitHub</p>
+              <p class="c-title" data-en="See my repositories">看看我的仓库</p>
+              <p class="c-meta">@mmmmagic</p>
+            </div>
+          </a>
+        </li>
+        <li class="reveal" style="--d:160ms">
+          <a class="c-card" href="https://space.bilibili.com/3546686844569724" target="_blank" rel="noopener" aria-label="Bilibili（新窗口打开）" data-en-label="Bilibili (opens in a new tab)">
+            <div class="c-top">
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8 3l3 4M16 3l-3 4M9 12v2M15 12v2"/></svg></span>
+              <svg class="c-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </div>
+            <div class="c-body">
+              <p class="c-label">Bilibili</p>
+              <p class="c-title" data-en="Visit my space">逛逛我的空间</p>
+              <p class="c-meta">UID 3546686844569724</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+
+      <div class="copy-row reveal" style="--d:120ms">
+        <p><span data-en="QQ number">QQ 号</span><code id="qqNum">3381645303</code></p>
+        <button class="btn copy-btn" id="copyBtn" type="button">
+          <svg class="ic-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+          <svg class="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+          <span class="lbl-default" data-en="Copy QQ number">复制 QQ 号</span>
+          <span class="lbl-done" data-en="Copied">已复制</span>
+        </button>
+        <span class="sr-only" id="copyStatus" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= Footer ================= -->
+<footer class="site-footer">
+  <div class="wrap foot-inner">
+    <div>
+      <p class="foot-copy">© 2026 mmmmagic · Designed by Claude</p>
+      <p class="foot-note" data-en="This is a personal fan page. Von Lycaon and related assets are the property of HoYoverse / miHoYo.">本站为个人同人性质页面，莱卡恩相关版权归 HoYoverse / 米哈游所有。</p>
+    </div>
+    <button class="to-top" id="toTop" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+      <span data-en="Back to top">返回顶部</span>
+    </button>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   mmmmagic — personal site script
+   ========================================================= */
+(() => {
+  'use strict';
+
+  const root = document.documentElement;
+  const $  = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
+  const reduceMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+  /* ---------- i18n ---------- */
+  const KEY = 'mmmmagic-lang';
+  const META = {
+    zh: {
+      title: 'mmmmagic — 学生 / 开发者 / 剪辑爱好者',
+      desc: 'mmmmagic 的个人主页：学生，喜欢写代码、剪视频和《绝区零》，最喜欢的角色是莱卡恩。'
+    },
+    en: {
+      title: 'mmmmagic — Student / Developer / Video editor',
+      desc: 'Personal homepage of mmmmagic, a student who loves coding, video editing and Zenless Zone Zero. Von Lycaon is the favorite.'
+    }
+  };
+  const ATTRS = [['label', 'aria-label'], ['alt', 'alt'], ['title', 'title']];
+  const descMeta = $('meta[name="description"]');
+  let lang = 'zh';
+
+  // Cache the original Chinese copy into data-zh* so toggling back is lossless
+  function cacheZh() {
+    $$('[data-en]').forEach((el) => {
+      if (el.dataset.zh === undefined) el.dataset.zh = el.textContent.trim();
+    });
+    ATTRS.forEach(([k, attr]) => {
+      $$('[data-en-' + k + ']').forEach((el) => {
+        const key = 'zh' + cap(k);
+        if (el.dataset[key] === undefined) el.dataset[key] = el.getAttribute(attr) || '';
+      });
+    });
+  }
+
+  function applyLang(next, persist) {
+    lang = next === 'en' ? 'en' : 'zh';
+    root.lang = lang === 'en' ? 'en' : 'zh-CN';
+    $$('[data-en]').forEach((el) => {
+      el.textContent = lang === 'en' ? el.dataset.en : el.dataset.zh;
+    });
+    ATTRS.forEach(([k, attr]) => {
+      $$('[data-en-' + k + ']').forEach((el) => {
+        el.setAttribute(attr, lang === 'en' ? el.dataset['en' + cap(k)] : el.dataset['zh' + cap(k)]);
+      });
+    });
+    document.title = META[lang].title;
+    if (descMeta) descMeta.setAttribute('content', META[lang].desc);
+    $$('[data-lang-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.langBtn === lang)));
+    $$('.lang').forEach((p) => { p.dataset.active = lang; });
+    requestAnimationFrame(moveIndicator); // nav label widths changed
+    if (persist) { try { localStorage.setItem(KEY, lang); } catch (e) { /* storage unavailable */ } }
+  }
+
+  /* ---------- Nav indicator ---------- */
+  const navLinks = $$('#navLinks a');
+  const navWrap = $('.nav-center');
+  const ind = $('#navInd');
+  const secIds = ['home', 'about', 'skills', 'contact'];
+  const secs = secIds.map((id) => document.getElementById(id));
+  let current = 'home';
+
+  function moveIndicator() {
+    const a = navLinks.find((l) => l.dataset.id === current);
+    navLinks.forEach((l) => {
+      const on = l === a;
+      l.classList.toggle('active', on);
+      if (on) l.setAttribute('aria-current', 'true'); else l.removeAttribute('aria-current');
+    });
+    if (!a || !navWrap || navWrap.offsetParent === null) { ind.style.opacity = '0'; return; }
+    const ar = a.getBoundingClientRect();
+    const wr = navWrap.getBoundingClientRect();
+    ind.style.transform = 'translateX(' + (ar.left - wr.left).toFixed(1) + 'px) scaleX(' + ar.width.toFixed(1) + ')';
+    ind.style.opacity = '1';
+  }
+
+  /* ---------- Scroll-driven effects (single rAF-throttled handler) ---------- */
+  const header = $('#siteHeader');
+  const heroBg = $('#heroBg');
+  const artFrame = $('#artFrame');
+  const artImg = $('#artImg');
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    const y = window.scrollY || window.pageYOffset;
+    const vh = window.innerHeight;
+
+    header.classList.toggle('scrolled', y > 16);
+
+    if (!reduceMQ.matches) {
+      // Hero background parallax
+      if (y < vh * 1.3) heroBg.style.transform = 'translate3d(0,' + (y * 0.12).toFixed(1) + 'px,0)';
+      // About artwork parallax
+      if (artFrame && artImg) {
+        const r = artFrame.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < vh) {
+          const p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / vh));
+          artImg.style.transform = 'translate3d(0,' + (p * -16).toFixed(1) + 'px,0) scale(1.12)';
+        }
+      }
+    }
+
+    // Active section
+    const line = vh * 0.4;
+    let cur = 'home';
+    secs.forEach((s) => { if (s && s.getBoundingClientRect().top <= line) cur = s.id; });
+    if (vh + y >= document.documentElement.scrollHeight - 4) cur = 'contact';
+    if (cur !== current) { current = cur; moveIndicator(); }
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+
+  /* ---------- Reveal on scroll ---------- */
+  function initReveal() {
+    const items = $$('.reveal');
+    if (reduceMQ.matches || !('IntersectionObserver' in window)) {
+      items.forEach((i) => i.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    items.forEach((i) => io.observe(i));
+  }
+
+  /* ---------- Cursor glow ---------- */
+  function initGlow() {
+    const glow = $('#cursorGlow');
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+    if (!glow || !fine.matches || reduceMQ.matches) return;
+    let tx = window.innerWidth / 2, ty = window.innerHeight / 2, x = tx, y = ty, raf = 0;
+    const tick = () => {
+      x += (tx - x) * 0.14; y += (ty - y) * 0.14;
+      glow.style.transform = 'translate3d(' + (x - 210).toFixed(1) + 'px,' + (y - 210).toFixed(1) + 'px,0)';
+      raf = (Math.abs(tx - x) > 0.3 || Math.abs(ty - y) > 0.3) ? requestAnimationFrame(tick) : 0;
+    };
+    window.addEventListener('pointermove', (e) => {
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      tx = e.clientX; ty = e.clientY;
+      glow.classList.add('on');
+      if (!raf) raf = requestAnimationFrame(tick);
+    }, { passive: true });
+    root.addEventListener('mouseleave', () => glow.classList.remove('on'));
+  }
+
+  /* ---------- Mobile drawer ---------- */
+  const drawer = $('#drawer');
+  const burger = $('#burger');
+  const backdrop = $('#backdrop');
+  const drawerClose = $('#drawerClose');
+  let lastFocus = null;
+
+  function openDrawer() {
+    lastFocus = document.activeElement;
+    drawer.inert = false;
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('lock');
+    window.setTimeout(() => drawerClose.focus(), 30);
+  }
+  function closeDrawer(restore) {
+    if (!drawer.classList.contains('open')) return;
+    drawer.classList.remove('open');
+    backdrop.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('lock');
+    drawer.inert = true;
+    if (restore !== false && lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  burger.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', () => closeDrawer());
+  backdrop.addEventListener('click', () => closeDrawer());
+  $$('#drawer a').forEach((a) => a.addEventListener('click', () => closeDrawer(false)));
+  document.addEventListener('keydown', (e) => {
+    if (!drawer.classList.contains('open')) return;
+    if (e.key === 'Escape') { closeDrawer(); return; }
+    if (e.key === 'Tab') { // simple focus trap
+      const f = $$('a[href], button:not([disabled])', drawer);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ---------- Copy QQ ---------- */
+  const copyBtn = $('#copyBtn');
+  const copyStatus = $('#copyStatus');
+  const qqNum = $('#qqNum');
+  let copyTimer = 0;
+
+  async function copyText(text) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (e) { /* fall through to legacy path */ }
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-9999px;left:0;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    } catch (e) { return false; }
+  }
+
+  copyBtn.addEventListener('click', async () => {
+    const ok = await copyText(qqNum.textContent.trim());
+    window.clearTimeout(copyTimer);
+    if (ok) {
+      copyBtn.classList.add('is-copied');
+      copyStatus.textContent = lang === 'en' ? 'QQ number copied' : 'QQ 号已复制';
+      copyTimer = window.setTimeout(() => {
+        copyBtn.classList.remove('is-copied');
+        copyStatus.textContent = '';
+      }, 2000);
+    } else {
+      const sel = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(qqNum);
+      sel.removeAllRanges(); sel.addRange(range);
+      copyStatus.textContent = lang === 'en' ? 'Copy failed. Please copy the number manually.' : '复制失败，请手动复制号码。';
+    }
+  });
+
+  /* ---------- Back to top ---------- */
+  $('#toTop').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reduceMQ.matches ? 'auto' : 'smooth' });
+  });
+
+  /* ---------- Language buttons ---------- */
+  $$('[data-lang-btn]').forEach((b) => b.addEventListener('click', () => applyLang(b.dataset.langBtn, true)));
+
+  /* ---------- Init ---------- */
+  cacheZh();
+  let saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) { /* ignore */ }
+  applyLang(saved === 'en' ? 'en' : 'zh', false);
+
+  initReveal();
+  initGlow();
+  update();
+  moveIndicator();
+  requestAnimationFrame(() => requestAnimationFrame(() => ind.classList.add('ready')));
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) closeDrawer(false);
+    moveIndicator();
+    onScroll();
+  });
+  window.addEventListener('load', moveIndicator);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveIndicator);
+})();
+</script>
+</body>
+</html>
