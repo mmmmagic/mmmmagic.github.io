@@ -1,4 +1,4 @@
-﻿# mmmmagic.github.io
+# mmmmagic.github.io
 
 mmmmagic 的个人网站 —— 单文件静态页面，托管在 GitHub Pages。
 
@@ -13,29 +13,44 @@ mmmmagic 的个人网站 —— 单文件静态页面，托管在 GitHub Pages�
 
 | 插件里的东西 | 本站里的对应物 |
 | --- | --- |
-| `.we-layer`（`z-index:-2`）里的 `.we-media` | `body::before`：壁纸 `cover` 铺满视口，左下角参数控制滤镜 |
-| `.we-scrim`（`z-index:-1`）一层纯黑 | `body::after`：`rgba(0,0,0,var(--we-scrim))` |
-| `html{background-color: 兜底色}` | `html` 的背景色（壁纸没送到屏时不闪白） |
+| `.we-layer`（`z-index:-2`）里的 `.we-media`（`object-fit` + 滤镜 + `scale(1 + blur×0.006)`） | `body::before` |
+| `.we-scrim`（`z-index:-1`）`rgba(0,0,0,scrim)` | `body::after` |
+| `html{background-color: 兜底色}` | `html` 的背景色（壁纸没铺满时不闪白） |
+| 设置真源：宿主文件 `%USERPROFILE%\.dsh-wallpaper-engine\config.json` 的 `config.settings` | `index.html` 的 `:root` 变量（同一批键名） |
+| localStorage 缓存键 `dsh-wallpaper-engine:selection` | 页面加载时读同名键，存在就覆盖默认值（字段、范围与插件 `settings-schema.js` 一致） |
 
-滤镜与变换的公式和插件完全一致：
+### 当前值与 DSH 存档逐字段相同
 
-- 媒体滤镜：`blur(Bpx) brightness(Y%) contrast(Z%) saturate(W%)`
-- 模糊会让画面边缘透出毛边 ⇒ 层按插件的补偿公式放大 `scale(1 + B × 0.006)`
+来源 `config.json`（`settingsVersion` 5）——两边的设置是同一份，不是两套相似的数值：
 
-可调旋钮都在 `index.html` 的 `:root` 里（对应插件的设置项）：
+| 插件字段 | DSH 里的值 | 本站变量 |
+| --- | --- | --- |
+| `wallpaperBlur` | 3 | `--we-wallpaper-blur:3` |
+| `backgroundBrightness` | 90 | `--we-brightness:90%` |
+| `backgroundContrast` | 100 | `--we-contrast:100%` |
+| `backgroundSaturate` | 100 | `--we-saturate:100%` |
+| `scrim` | 0.25 | `--we-scrim:.25` |
+| `wallpaperOpacity` | 60 | `--we-wallpaper-opacity:.4`（= (100−60)/100，与插件同算法） |
+| `objectFit` | contain | `--we-object-fit:contain` |
+| `flip` | false | `--we-flip-x:1` |
 
-```css
---we-wallpaper-blur: 28;   /* 壁纸模糊 px，0–60（插件默认 0） */
---we-brightness: 74%;      /* 亮度 40–160%（插件默认 100%） */
---we-contrast: 100%;       /* 对比度 40–200% */
---we-saturate: 100%;       /* 饱和度 0–200% */
---we-scrim: .58;           /* 暗化 0–1（插件默认 .25） */
---we-wallpaper-opacity: 1; /* 壁纸透明度，1 = 不透明 */
+滤镜与变换公式和插件完全一致：`blur(Bpx) brightness(Y%) contrast(Z%) saturate(W%)`，
+模糊边缘按 `scale(1 + B × 0.006)` 补偿。
+
+### 改完 DSH 的壁纸设置后，一键同步
+
+```bash
+cd website
+node tools/sync-dsh-background.mjs            # 读存档，重写 index.html 的 :root 变量
+node tools/sync-dsh-background.mjs --dry-run  # 只看将写入什么，不动文件
+git add -A && git commit -m "Sync wallpaper settings with DSH" && git push
 ```
 
-这张壁纸本身偏亮（大面积白底），所以亮度与暗化比插件默认值压得更低，
-才能在深色版式下保持文字对比度；想要更接近 "DSH 原味" 的亮度，
-把 `--we-brightness` 调回 `100%`、`--we-scrim` 调回 `.25` 即可。
+脚本只认 `config.json`（插件认定的唯一真源；localStorage 只是它的缓存），
+所以 DSH 里拖动滑杆 → 关一次设置面板让它落盘 → 跑脚本 → push，网站就跟着变。
+
+唯一有意偏离的地方：手机端（`@media (max-width:768px)`）把 `object-fit` 覆盖成 `cover`，
+否则 `contain` 在竖屏上只剩一条窄图；桌面端与 DSH 完全一致。
 
 ## 本地预览
 
@@ -53,6 +68,7 @@ python -m http.server 8000
 - `assets/lycaon-art.webp` —— 关于区配图（黑白处理以契合配色）
 - `assets/lycaon-hero.webp` —— 旧背景壁纸，现未引用（留作备用）
 - `assets/og.png` —— 社交分享预览图
+- `tools/sync-dsh-background.mjs` —— 从 DSH 插件存档同步背景设置（见上）
 - `.nojekyll` —— 跳过 Jekyll 处理
 
 > 本站为个人同人性质页面，莱卡恩相关版权归 HoYoverse / 米哈游所有。

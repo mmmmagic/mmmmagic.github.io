@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -81,23 +81,34 @@ body{
      html{background-color:兜底色}          →  html 的背景（掉帧时不闪白）
    媒体滤镜 = blur(Bpx) brightness(Y%) contrast(Z%) saturate(W%)，只写非默认项；
    CSS 模糊会让画面边缘透出毛边，所以插件把层放大 (1 + B × 0.006)，这里同一公式。
-   下面四个旋钮与插件设置一一对应（默认 scrim .25 / blur 0 / 三项 100%）；
-   这张壁纸偏亮，为了让深色版式可读，亮度与暗化调到了观感相当的值。
+
+   ---- 下面的数值 = DSH 里 dsh-plugin-wallpaper-engine 的真实存档 ----
+   来源（宿主文件，插件认定的唯一真源）：
+     %USERPROFILE%\.dsh-wallpaper-engine\config.json  → config.settings
+   当前值：wallpaperBlur 3 / backgroundBrightness 90 / backgroundContrast 100
+           backgroundSaturate 100 / scrim 0.25 / wallpaperOpacity 60 / objectFit contain / flip false
+   wallpaperOpacity 语义与插件一致：CSS opacity = (100 - wallpaperOpacity) / 100 = 0.4
+   改了 DSH 里的滑杆后，运行 `node tools/sync-dsh-background.mjs` 会按同一份
+   config.json 重写这段（含 settingsVersion），再 push 即与 DSH 保持一致。
    ========================================================= */
 :root{
-  --we-wallpaper-blur:28;      /* 壁纸模糊 px (0–60) */
-  --we-brightness:74%;         /* 亮度 (40–160%) */
-  --we-contrast:100%;          /* 对比度 (40–200%) */
-  --we-saturate:100%;          /* 饱和度 (0–200%) */
-  --we-scrim:.58;              /* 暗化 (0–1) */
-  --we-wallpaper-opacity:1;    /* 壁纸透明度：1 = 不透明，越小越透 */
+  /* ==== DSH dsh-plugin-wallpaper-engine settings (auto-sync) ==== */
+  --we-wallpaper-blur:3;       /* wallpaperBlur px (0–60) */
+  --we-brightness:90%;         /* backgroundBrightness (40–160%) */
+  --we-contrast:100%;          /* backgroundContrast (40–200%) */
+  --we-saturate:100%;          /* backgroundSaturate (0–200%) */
+  --we-scrim:0.25;              /* scrim 0–1 */
+  --we-wallpaper-opacity:0.4;   /* (100 - wallpaperOpacity) / 100 */
+  --we-object-fit:contain;     /* objectFit: contain | cover */
+  --we-flip-x:1;               /* flip ? -1 : 1 */
+  /* ==== /DSH settings ==== */
 }
 body::before{
   content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
-  background:url("assets/wallpaper.webp") center/cover no-repeat;
+  background:url("assets/wallpaper.webp") center/var(--we-object-fit) no-repeat;
   opacity:var(--we-wallpaper-opacity);
   filter:blur(calc(var(--we-wallpaper-blur) * 1px)) brightness(var(--we-brightness)) contrast(var(--we-contrast)) saturate(var(--we-saturate));
-  transform:scale(calc(1 + var(--we-wallpaper-blur) * 0.006));
+  transform:scale(calc(1 + var(--we-wallpaper-blur) * 0.006)) scaleX(var(--we-flip-x));
   transform-origin:center;
 }
 body::after{
@@ -347,11 +358,11 @@ html[lang="en"] .sec-title{letter-spacing:-.03em}
   .c-card::before{content:none}
 }
 @media (max-width:768px){
-  body::before{background-position:66% 50%}
+  body::before{background-size:cover;background-position:66% 50%}
   .header-inner{grid-template-columns:1fr auto}
   .nav-center,.header-actions .gh-btn{display:none}
   .burger{display:inline-grid}
-  .hero{align-items:flex-end}
+  .hero{align-items:flex-end}
   .hero-inner{padding-block:calc(var(--header-h) + 42vh) 96px}
   .hero-foot{display:none}
   .copy-btn{margin-left:0}
@@ -382,6 +393,29 @@ html[lang="en"] .sec-title{letter-spacing:-.03em}
   .art-frame{transform:none}
 }
 </style>
+<!-- 与 DSH dsh-plugin-wallpaper-engine 同键名、同字段、同范围的设置读取：
+     键 = "dsh-wallpaper-engine:selection"，结构 = {"settings":{...}}；
+     只在本地存在存档时覆盖上面的默认值（数值范围按插件 settings-schema.js 的 KINDS 收敛）。 -->
+<script>
+(function(){
+  var KEY = "dsh-wallpaper-engine:selection";
+  var root = document.documentElement.style;
+  function clamp(v, lo, hi, dflt){ v = Number(v); return isFinite(v) ? Math.min(hi, Math.max(lo, v)) : dflt; }
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return;
+    var s = ((JSON.parse(raw) || {}).settings) || {};
+    if(s.wallpaperBlur != null)        root.setProperty("--we-wallpaper-blur", String(clamp(s.wallpaperBlur, 0, 60, 3)));
+    if(s.backgroundBrightness != null) root.setProperty("--we-brightness", clamp(s.backgroundBrightness, 40, 160, 90) + "%");
+    if(s.backgroundContrast != null)   root.setProperty("--we-contrast", clamp(s.backgroundContrast, 40, 200, 100) + "%");
+    if(s.backgroundSaturate != null)   root.setProperty("--we-saturate", clamp(s.backgroundSaturate, 0, 200, 100) + "%");
+    if(s.scrim != null)                root.setProperty("--we-scrim", String(clamp(s.scrim, 0, 1, 0.25)));
+    if(s.wallpaperOpacity != null)     root.setProperty("--we-wallpaper-opacity", String((100 - clamp(s.wallpaperOpacity, 0, 90, 60)) / 100));
+    if(s.objectFit === "contain" || s.objectFit === "cover") root.setProperty("--we-object-fit", s.objectFit);
+    if(typeof s.flip === "boolean")    root.setProperty("--we-flip-x", s.flip ? "-1" : "1");
+  }catch(e){ /* 存档损坏时保留默认值 */ }
+})();
+</script>
 </head>
 
 <body>
