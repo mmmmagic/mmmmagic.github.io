@@ -1,8 +1,6 @@
-assets/candidates/
+﻿assets/candidates/
 prompt.md
-preview-*.png
-verify-*.png
-verify2-*.png
-live-*.png
 .tools/
-verify3-*.png
+preview-*.png
+verify*.png
+live-*.png
